@@ -266,13 +266,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
-    <Compile Include="SignalR.Sample\Startup.cs" />
-    <Compile Include="SignalR.Sample\Stock.cs" />
-    <Compile Include="SignalR.Sample\GameState.cs" />
-    <Compile Include="SignalR.Sample\GameStateHub.cs" />
+    <Compile Include="SignalR\Startup.cs" />
+    <Compile Include="SignalR\Stock.cs" />
+    <Compile Include="SignalR\GameState.cs" />
+    <Compile Include="SignalR\GameStateHub.cs" />
     <Compile Include="Startup.cs" />
-    <Content Include="SignalR.Sample\jquery-1.10.2.min.js" />
-    <Content Include="SignalR.Sample\jquery-1.10.2.min.map" />
+    <Content Include="SignalR\jquery-1.10.2.min.js" />
+    <Content Include="SignalR\jquery-1.10.2.min.map" />
     <None Include="Views\Analysis\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1105,10 +1105,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="SignalR.Sample\jquery.color-2.1.2.min.js" />
-    <Content Include="SignalR.Sample\SignalR.StockTicker.js" />
-    <Content Include="SignalR.Sample\StockTicker.css" />
-    <Content Include="SignalR.Sample\StockTicker.html" />
+    <Content Include="SignalR\jquery.color-2.1.2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

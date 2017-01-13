@@ -74,6 +74,10 @@ app.controller('analysisCtrl', ['$scope', '$http',
                 .done(function (state) {
 
                 });
+
+            $scope.submitMove = function () {
+                ticker.server.submit($scope.move);
+            }
         });
 
         var init3 = function() {
@@ -90,6 +94,7 @@ app.controller('analysisCtrl', ['$scope', '$http',
 
             update();
         };
+
 
         // at the bottom of your controller
         var update = function () {

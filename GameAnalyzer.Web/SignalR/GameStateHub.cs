@@ -45,5 +45,10 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         {
             _gameState.Reset();
         }
+
+        public void Submit(string move)
+        {
+            
+        }
     }
 }
