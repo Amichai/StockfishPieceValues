@@ -13,10 +13,10 @@ namespace GameAnalyzer.Web
     {
         protected void Application_Start()
         {
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }

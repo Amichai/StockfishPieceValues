@@ -12,6 +12,8 @@ namespace GameAnalyzer.Web
     {
         public void Configuration(IAppBuilder app)
         {
+            Microsoft.AspNet.SignalR.StockTicker.Startup.ConfigureSignalR(app);
+
             ConfigureAuth(app);
         }
     }

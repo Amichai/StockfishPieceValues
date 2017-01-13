@@ -7,8 +7,15 @@ using ChessKit.ChessLogic.Algorithms;
 
 namespace GameAnalyzer.Lib
 {
-    internal sealed class ChessGame
+    public sealed class ChessGame
     {
+        public ChessGame()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; }
+
         private readonly List<string> moves = new List<string>();
 
         private const string START_POSITION = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

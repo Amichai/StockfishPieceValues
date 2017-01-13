@@ -1,0 +1,30 @@
+﻿<link href="~/Content/Site.css" rel="stylesheet"/>
+
+<div ng-app="chessApp">
+    <div ng-controller="analysisCtrl">
+        <div class="row">
+            <div id = "mainBoard" class="col-md-5">
+                <div ng-repeat="x in [0,1,2,3,4,5,6,7]">
+                    <span ng-repeat="y in [0,1,2,3,4,5,6,7]">
+                        <span ng-class="getClass(x, y)" class="cell X{{x}}Y{{y}}"
+                              ng-style="{'transform': getTransform(x, y)}">|{{x}},{{y}}|</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <br/>
+
+            <button type="button" class="btn btn-default navbar-btn" ng-click="loadGame()">Load</button>
+
+            <button type="button" class="btn btn-default navbar-btn"><</button>
+
+            <button type="button" class="btn btn-default navbar-btn">></button>
+        </div>
+    </div>
+</div>
+
+
+<script src = "~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/HomeController.js"></script>

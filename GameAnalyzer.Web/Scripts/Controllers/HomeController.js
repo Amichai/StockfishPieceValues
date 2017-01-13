@@ -24,10 +24,59 @@ app.controller('analysisCtrl', ['$scope', '$http',
         }
 
         angular.element(document).ready(function () {
-            init();
+            init3();
+
+            var ticker = $.connection.gameState; // the generated client-side hub proxy
+
+            // Add client-side hub methods that the server will call
+            $.extend(ticker.client, {
+                updateStockPrice: function (stock) {
+                    var displayStock = formatStock(stock),
+                        $row = $(rowTemplate.supplant(displayStock)),
+                        $li = $(liTemplate.supplant(displayStock)),
+                        bg = stock.LastChange < 0
+                                ? '255,148,148' // red
+                                : '154,240,117'; // green
+
+                    $stockTableBody.find('tr[data-symbol=' + stock.Symbol + ']')
+                        .replaceWith($row);
+                    $stockTickerUl.find('li[data-symbol=' + stock.Symbol + ']')
+                        .replaceWith($li);
+
+                    $row.flash(bg, 1000);
+                    $li.flash(bg, 1000);
+                },
+
+                marketOpened: function () {
+                    $("#open").prop("disabled", true);
+                    $("#close").prop("disabled", false);
+                    $("#reset").prop("disabled", true);
+                    scrollTicker();
+                },
+
+                marketClosed: function () {
+                    $("#open").prop("disabled", false);
+                    $("#close").prop("disabled", true);
+                    $("#reset").prop("disabled", false);
+                    stopTicker();
+                },
+
+                marketReset: function () {
+                    return init();
+                }
+            });
+
+            // Start the connection
+            $.connection.hub.start()
+                .then(function () {
+                    return ticker.server.getMarketState();
+                })
+                .done(function (state) {
+
+                });
         });
 
-        var init = function() {
+        var init3 = function() {
             $scope.boardState = [
                 -4, -2, -3, -5, -6, -3, -2, -4,
                 -1, -1, -1, -1, -1, -1, -1, -1,
@@ -76,4 +125,6 @@ app.controller('analysisCtrl', ['$scope', '$http',
                 }
             }
         };
+
+
     }]);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using GameAnalyzer.Lib;
 
 namespace GameAnalyzer.Web.Controllers.Api
 {
@@ -22,11 +23,11 @@ namespace GameAnalyzer.Web.Controllers.Api
         }
 
         // POST: api/Game
-        public void Post()
+        public async void Post()
         {
-            var r = Request.Content.ReadAsStringAsync().Result;
+            var r = await Request.Content.ReadAsStringAsync();
 
-
+            var game = new ChessGame(r);
         }
 
         // PUT: api/Game/5
