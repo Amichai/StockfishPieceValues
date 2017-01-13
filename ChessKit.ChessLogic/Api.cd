@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ChessKit.ChessLogic.Board" Collapsed="true">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="StartPosition" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.AnalyzedMove">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="AnalyzedMove" Hidden="true" />
+      <Property Name="Annotations" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAgAAAAAAAAAAAQACAAAAAAAAAoEAAAAA=</HashCode>
+      <FileName>AnalyzedMove.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Move" />
+      <Property Name="OriginalPosition" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.IllegalMove">
+    <Position X="1.25" Y="3.25" Width="1.5" />
+    <Members>
+      <Method Name="IllegalMove" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IllegalMove.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.LegalMove">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <Members>
+      <Method Name="LegalMove" Hidden="true" />
+    </Members>
+    <AssociationLine Name="ResultPosition" Type="ChessKit.ChessLogic.PositionCore">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.275" Y="0.067" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LegalMove.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ResultPosition" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Move">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAgAAAAQ=</HashCode>
+      <FileName>Move.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Position">
+    <Position X="6.25" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAIAAAAEAAAAgAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Core" />
+      <Property Name="Move" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.PositionCore" BaseTypeListCollapsed="true">
+    <Position X="3" Y="4.75" Width="2" />
+    <Members>
+      <Field Name="BytesCount" Hidden="true" />
+      <Property Name="Cells" Hidden="true" />
+      <Method Name="Equals" Hidden="true" />
+      <Method Name="GetHashCode" Hidden="true" />
+      <Method Name="operator !=" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAgAiAICCAAAAAAAAIAAKAAAAAAABiA=</HashCode>
+      <FileName>PositionCore.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

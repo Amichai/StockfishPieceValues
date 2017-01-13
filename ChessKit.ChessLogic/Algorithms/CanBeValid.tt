@@ -1,0 +1,90 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="$(ProjectDir)bin\Debug\ChessKit.ChessLogic.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="ChessKit.ChessLogic.Internals" #>
+/* This code is auto-generated! 
+ * It is strongly adviced not to change it manually! */
+using ChessKit.ChessLogic.Primitives;
+
+namespace ChessKit.ChessLogic.Algorithms
+{
+    static class CanBeValid
+    {
+        public static bool CanBeValidMove(byte[] cells, Piece piece, int fromSquare, int toSquare)
+        {
+            var dx = toSquare - fromSquare;
+            switch (piece)
+            {
+<#
+    foreach (var p in MetaPiece.All) 
+    {
+#>
+                #region ' <#=p.Color#> <#=p.PieceType#> '
+
+                case Piece.<#=p.Color#><#=p.PieceType#>:
+<#
+        if (p.MoveDirections.Any(dir => dir.Count > 1))
+        {
+            foreach (var dir in p.MoveDirections)
+            {
+                var delta = dir.DeltaY * 16 + dir.DeltaX;
+#>
+                    if (dx % <#=delta#> == 0)
+                    {
+                        var steps = dx / <#=delta#>;
+                        if (steps >= 0 && steps < 8)
+                            for (var i = fromSquare + <#=delta#>; (i & 0x88) == 0; i += <#=delta#>)
+                                if (i == toSquare) return true;
+                                else if (cells[i] != 0) return false;
+                    }
+<#
+            }
+#>
+                    return false;
+<#
+        }
+        else // Non-slider move
+        {
+#>
+                    switch (dx)
+                    {
+<#
+            foreach (var dir in p.MoveDirections)
+            {
+                var delta = dir.DeltaY * 16 + dir.DeltaX;
+#>
+                        case <#=delta#>:
+<#
+                if (dir.CapturesThisWay)
+                {
+#>
+                            return true;
+<#
+                }
+                else
+                {
+#>
+                            return cells[toSquare] == 0;
+<#
+                }
+            }
+#>
+                    }
+                    return false;
+<#                 
+        }
+#>
+
+                #endregion
+
+<#
+    }
+#>
+                default:
+                    return false;
+            }
+        }
+    }
+}

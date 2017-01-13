@@ -1,0 +1,8 @@
+packages/
+BoardStateFormatter/bin/
+BoardStateFormatter/obj/
+.vs/
+ChessKit.ChessLogic/bin/
+ChessKit.ChessLogic/obj/
+GameAnalyzer.Lib/bin/
+GameAnalyzer.Lib/obj/

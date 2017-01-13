@@ -1,0 +1,59 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension="generated.cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="$(ProjectDir)bin\Debug\ChessKit.ChessLogic.dll" #>
+<#@ import namespace="ChessKit.ChessLogic.Primitives" #>
+<#@ import namespace="ChessKit.ChessLogic.Internals" #>
+/* This code is auto-generated! 
+ * It is strongly adviced not to change it manually! */
+using static ChessKit.ChessLogic.Primitives.Piece;
+
+namespace ChessKit.ChessLogic.Algorithms
+{
+    static partial class Attacks
+    {
+<#
+foreach (var color in new []{Color.White, Color.Black})
+{
+#>
+        public static bool IsSquareAttackedBy<#=color#>(this byte[] cells, int square)
+        {
+<#
+    foreach (var p in MetaPiece.All) 
+        if (p.Color == color)
+            foreach (var dir in p.MoveDirections)
+                if (dir.CapturesThisWay)
+            {
+                var delta = dir.DeltaY * 16 + dir.DeltaX;
+                if (dir.Count > 1)
+                {
+#>
+            for (var i = square + <#=delta#>; (i & 0x88) == 0; i += <#=delta#>)
+            {
+                var piece = cells[i];
+                if (piece == 0) continue;
+                if (piece == (byte) <#=p.Color#><#=p.PieceType#>) return true;
+                break;
+            }
+<#
+        }
+        else
+        {
+#>
+            {
+                var sq = square - <#=delta#>;
+                if ((sq & 0x88) == 0)
+                    if (cells[sq] == (byte) <#=p.Color#><#=p.PieceType#>)
+                        return true;
+            }
+<#
+        }
+    }
+#>
+            return false;
+        }
+<#
+}
+#>
+    }
+}

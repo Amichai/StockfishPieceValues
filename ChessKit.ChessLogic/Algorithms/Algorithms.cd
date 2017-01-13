@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ChessKit.ChessLogic.Algorithms.Diagnostics">
+    <Position X="0.5" Y="4" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Diagnostics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.Attacks">
+    <Position X="0.5" Y="0.5" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAIAAAAAAAAAAAAAAAACAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Attacks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.CanBeValid">
+    <Position X="0.5" Y="2.5" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Algorithms\CanBeValid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.EndGame">
+    <Position X="0.5" Y="5.5" Width="4.75" />
+    <Members>
+      <Method Name="CountBy" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Class Name="ChessKit.ChessLogic.Algorithms.EndGame.HistoryEnumerable" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Algorithms\EndGame.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+      <Class Name="ChessKit.ChessLogic.Algorithms.EndGame.HistoryEnumerator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Algorithms\EndGame.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAoAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\EndGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.Fen">
+    <Position X="0.5" Y="7.5" Width="3.75" />
+    <Members>
+      <Method Name="ActiveColor" Hidden="true" />
+      <Method Name="CastlingAvailability" Hidden="true" />
+      <Method Name="EnPassant" Hidden="true" />
+      <Method Name="FullmoveNumber" Hidden="true" />
+      <Method Name="HalfmoveClock" Hidden="true" />
+      <Method Name="PiecePlacement" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Class Name="ChessKit.ChessLogic.Algorithms.Fen.EnPassantParser" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Algorithms\Fen.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAQAAAQAAAAAAAAIAAAhAgCAAAAAAABAA=</HashCode>
+      <FileName>Algorithms\Fen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.GetLegalMoves">
+    <Position X="0.5" Y="9.5" Width="5.5" />
+    <Members>
+      <Method Name="InternalGetLegalMoves" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAIAABAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\GetLegalMoves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.MoveGeneration">
+    <Position X="0.5" Y="11" Width="5.75" />
+    <Members>
+      <Method Name="GenerateBlackCastlingMoves" Hidden="true" />
+      <Method Name="GenerateBlackPawnMoves" Hidden="true" />
+      <Method Name="GenerateWhiteCastlingMoves" Hidden="true" />
+      <Method Name="GenerateWhitePawnMoves" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAACAAEAAAAAgAAAgAAAAAAAA=</HashCode>
+      <FileName>Algorithms\MoveGeneration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.MoveLegality">
+    <Position X="0.5" Y="12.5" Width="6" />
+    <Members>
+      <Method Name="KilledAvailability" Hidden="true" />
+      <Method Name="ValidateBlackBishopMove" Hidden="true" />
+      <Method Name="ValidateBlackCastlingMove" Hidden="true" />
+      <Method Name="ValidateBlackKingMove" Hidden="true" />
+      <Method Name="ValidateBlackKnightMove" Hidden="true" />
+      <Method Name="ValidateBlackPawnMove" Hidden="true" />
+      <Method Name="ValidateBlackQueenMove" Hidden="true" />
+      <Method Name="ValidateBlackRookMove" Hidden="true" />
+      <Method Name="ValidateMove" Hidden="true" />
+      <Method Name="ValidateWhiteBishopMove" Hidden="true" />
+      <Method Name="ValidateWhiteCastlingMove" Hidden="true" />
+      <Method Name="ValidateWhiteKingMove" Hidden="true" />
+      <Method Name="ValidateWhiteKnightMove" Hidden="true" />
+      <Method Name="ValidateWhitePawnMove" Hidden="true" />
+      <Method Name="ValidateWhiteQueenMove" Hidden="true" />
+      <Method Name="ValidateWhiteRookMove" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>hkAAAAIAAACAgAAEAQAJAAAAAAAACAAQBAAIAAEAAwA=</HashCode>
+      <FileName>Algorithms\MoveLegality.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.San">
+    <Position X="0.5" Y="14.25" Width="4.75" />
+    <Members>
+      <Method Name="GetMove" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAIAAAAAAAAAAAAAAQAAAAAAAAQAABgAAAAAA=</HashCode>
+      <FileName>Algorithms\San.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessKit.ChessLogic.Algorithms.Zobrist">
+    <Position X="0.5" Y="16.5" Width="5.25" />
+    <Members>
+      <Method Name="IndexOf" Hidden="true" />
+      <Field Name="ZobristKeys" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAA=</HashCode>
+      <FileName>Algorithms\Zobrist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

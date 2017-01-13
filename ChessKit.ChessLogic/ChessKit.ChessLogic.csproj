@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7E7C0436-3E23-48F5-991B-5E3433A26E78}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ChessKit.ChessLogic</RootNamespace>
+    <AssemblyName>ChessKit.ChessLogic</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile5</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Algorithms\CanBeValid.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CanBeValid.cs</LastGenOutput>
+    </None>
+    <None Include="Algorithms\Algorithms.cd" />
+    <None Include="Api.cd" />
+    <None Include="Primitives\Primitives.cd" />
+    <None Include="Primitives\Cells.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Cells.cs</LastGenOutput>
+    </None>
+    <None Include="Algorithms\MoveGeneration.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MoveGeneration.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Algorithms\Attacks.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Attacks.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Algorithms\MoveLegality.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MoveLegality.generated.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\CanBeValid.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CanBeValid.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\Attacks.cs">
+      <DependentUpon>Attacks.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AnalyzedMove.cs" />
+    <Compile Include="IllegalMove.cs" />
+    <Compile Include="LegalMove.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="Primitives\Cells.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cells.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Board.cs" />
+    <Compile Include="Algorithms\Fen.cs" />
+    <Compile Include="Algorithms\MoveGeneration.cs">
+      <DependentUpon>MoveGeneration.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\MoveGeneration.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MoveGeneration.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\EndGame.cs" />
+    <Compile Include="Algorithms\Diagnostics.cs" />
+    <Compile Include="Algorithms\MoveLegality.cs">
+      <DependentUpon>MoveLegality.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\MoveLegality.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MoveLegality.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\GetLegalMoves.cs" />
+    <Compile Include="PositionCore.cs" />
+    <Compile Include="Primitives\Castlings.cs" />
+    <Compile Include="Primitives\MoveErrors.cs" />
+    <Compile Include="Primitives\MoveInfo.cs" />
+    <Compile Include="Primitives\MoveWarnings.cs" />
+    <Compile Include="Primitives\Piece.cs" />
+    <Compile Include="Primitives\GameStates.cs" />
+    <Compile Include="Internals\ImmutableAttribute.cs" />
+    <Compile Include="Internals\MetaPiece.cs" />
+    <Compile Include="GeneratedMove.cs" />
+    <Compile Include="Internals\MoveDirection.cs" />
+    <Compile Include="Primitives\MoveAnnotations.cs" />
+    <Compile Include="Primitives\Color.cs" />
+    <Compile Include="Primitives\PieceExtensions.cs" />
+    <Compile Include="Primitives\ColorExtensions.cs" />
+    <Compile Include="Primitives\PieceType.cs" />
+    <Compile Include="Primitives\Coordinates.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Algorithms\San.cs" />
+    <Compile Include="Algorithms\Attacks.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attacks.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Algorithms\Zobrist.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations.PCL328, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.PCL328.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MoreLinq.Portable, Version=1.1.17511.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MoreLinq.Portable.1.1.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MoreLinq.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

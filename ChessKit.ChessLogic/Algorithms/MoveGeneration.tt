@@ -1,0 +1,161 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension="generated.cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="$(ProjectDir)bin\Debug\ChessKit.ChessLogic.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="ChessKit.ChessLogic.Primitives" #>
+<#@ import namespace="ChessKit.ChessLogic.Internals" #>
+/* This code is auto-generated! 
+ * It is strongly adviced not to change it manually! */
+using System.Collections.Generic;
+using ChessKit.ChessLogic.Primitives;
+using static ChessKit.ChessLogic.Primitives.MoveAnnotations;
+
+namespace ChessKit.ChessLogic.Algorithms
+{
+    static partial class MoveGeneration
+    {
+        public static void GenerateMoves(byte[] cells, 
+			 int whiteKingSquare, int blackKingSquare, Piece piece, int fromSquare,
+             int? enPassantFile, Castlings availableCastlings, List<GeneratedMove> collector)
+        {
+            switch (piece)
+            {
+<#
+    foreach (var p in MetaPiece.All) 
+    {
+		var lowerColor = p.Color.ToString().ToLower();
+#>
+                #region ' <#=p.Color#> <#=p.PieceType#> '
+                case Piece.<#=p.Color#><#=p.PieceType#>:
+<#
+        if (p.MoveDirections.Any(dir => dir.Count > 1))
+        {
+            foreach (var dir in p.MoveDirections)
+            {
+                var delta = dir.DeltaY * 16 + dir.DeltaX;
+#>
+                    for (var to = fromSquare + <#=delta#>; (to & 0x88) == 0; to += <#=delta#>)
+                    {
+                        var toPiece = cells[to];
+                        if (toPiece == 0)
+                        {
+                            cells[fromSquare] = (byte)Piece.EmptyCell;
+                            cells[to] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(<#=lowerColor#>KingSquare))
+                                collector.Add(new GeneratedMove(fromSquare, to, <#=p.PieceType#>));
+                            cells[fromSquare] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            cells[to] = toPiece;
+                        }
+                        else if ((Color)(toPiece & (byte)Color.Black) != Color.<#=p.Color#>)
+                        {
+                            cells[fromSquare] = (byte)Piece.EmptyCell;
+                            cells[to] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(<#=lowerColor#>KingSquare))
+                                collector.Add(new GeneratedMove(fromSquare, to, <#=p.PieceType#> | Capture));
+                            cells[fromSquare] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            cells[to] = toPiece;
+                            break;
+                        }
+                        else break;
+                    }
+<#
+            }
+        }
+        else if (p.PieceType == PieceType.Pawn)
+        {
+#>
+                    Generate<#=p.Color#>PawnMoves(cells, <#=lowerColor#>KingSquare, fromSquare, enPassantFile, collector);
+<#
+        }
+        else // Non-slider move
+        {
+            foreach (var dir in p.MoveDirections.Where(m => !m.IsSpecial))
+            {
+                var delta = dir.DeltaY * 16 + dir.DeltaX;
+#>
+                    {
+                        var to = fromSquare + <#=delta#>;
+                        if ((to & 0x88) == 0)
+                        {
+                            var toPiece = cells[to];
+                            if (toPiece == 0)
+                            {
+                                cells[fromSquare] = (byte)Piece.EmptyCell;
+<#
+                                if (p.PieceType != PieceType.King)
+                                {
+#>
+                                cells[to] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                                if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(<#=lowerColor#>KingSquare))
+<#
+                                }
+                                else
+                                {
+#>
+                                if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(to))
+<#
+                                }
+#>
+                                    collector.Add(new GeneratedMove(fromSquare, to, <#=p.PieceType#>));
+<#
+                                if (p.PieceType != PieceType.King)
+                                {
+#>
+                                cells[to] = toPiece;
+<#
+                                }
+#>
+                                cells[fromSquare] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            }
+                            else if ((Color)(toPiece & (byte)Color.Black) != Color.<#=p.Color#>)
+                            {
+                                cells[fromSquare] = (byte)Piece.EmptyCell;
+<#
+                                if (p.PieceType != PieceType.King)
+                                {
+#>
+                                cells[to] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                                if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(<#=lowerColor#>KingSquare))
+<#
+                                }
+                                else
+                                {
+#>
+                                if (!cells.IsSquareAttackedBy<#=p.Color.Invert()#>(to))
+<#
+                                }
+#>
+                                    collector.Add(new GeneratedMove(fromSquare, to, <#=p.PieceType#> | Capture));
+<#
+                                if (p.PieceType != PieceType.King)
+                                {
+#>
+                                cells[to] = toPiece;
+<#
+                                }
+#>
+                                cells[fromSquare] = (byte)Piece.<#=p.Color#><#=p.PieceType#>;
+                            }
+                        }
+                    }
+<#
+                }
+            }
+            if (p.PieceType == PieceType.King)
+            {
+#>
+                    Generate<#=p.Color#>CastlingMoves(cells, fromSquare, availableCastlings, collector);
+<#
+            }
+#>
+                    break;
+                #endregion
+
+<#                 
+        }
+#>
+            }
+        }
+    }
+}

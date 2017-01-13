@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAnalyzer.Web", "GameAnalyzer.Web\GameAnalyzer.Web.csproj", "{21315365-C727-44BD-87AF-C1AC7E7B8F49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAnalyzer.Lib", "GameAnalyzer.Lib\GameAnalyzer.Lib.csproj", "{1CEE6728-6E3C-48D1-ACE3-3869E585EEB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessKit.ChessLogic", "ChessKit.ChessLogic\ChessKit.ChessLogic.csproj", "{7E7C0436-3E23-48F5-991B-5E3433A26E78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21315365-C727-44BD-87AF-C1AC7E7B8F49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21315365-C727-44BD-87AF-C1AC7E7B8F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21315365-C727-44BD-87AF-C1AC7E7B8F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21315365-C727-44BD-87AF-C1AC7E7B8F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CEE6728-6E3C-48D1-ACE3-3869E585EEB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CEE6728-6E3C-48D1-ACE3-3869E585EEB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CEE6728-6E3C-48D1-ACE3-3869E585EEB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CEE6728-6E3C-48D1-ACE3-3869E585EEB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E7C0436-3E23-48F5-991B-5E3433A26E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E7C0436-3E23-48F5-991B-5E3433A26E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E7C0436-3E23-48F5-991B-5E3433A26E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E7C0436-3E23-48F5-991B-5E3433A26E78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
