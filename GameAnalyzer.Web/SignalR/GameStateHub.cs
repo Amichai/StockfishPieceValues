@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Microsoft.AspNet.SignalR.StockTicker
@@ -45,6 +46,11 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         public string GetEval()
         {
             return _gameState.GetEval();
+        }
+
+        public string GetLastMove()
+        {
+            return _gameState.GetLastMove();
         }
     }
 }

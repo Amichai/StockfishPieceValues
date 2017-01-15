@@ -17,9 +17,17 @@
                     </span>
                 </div>
             </div>
+
+            <div id="gameMoves" class="col-md-5">
+                <span ng-repeat="move in moveList track by $index">
+                    <span ng-if="$index % 2 == 0">{{$index / 2 + 1}}.</span>
+                    {{move}}
+                    <br ng-if="$index % 2 == 1"/>
+                </span>
+            </div>
         </div>
 
-        <input ng-model="move"/>
+        <input ng-model="move" ng-style="errorStyle"/>
         <button type="button" class="btn btn-default" ng-click="submitMove()">Submit</button>
 
         <br/>

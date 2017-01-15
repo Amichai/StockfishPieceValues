@@ -20,6 +20,10 @@ textarea {
     height: 520px;
 }
 
+#gameMoves {
+    margin: 30px;
+}
+
 .cell {
     width: 64px;
     height: 64px;

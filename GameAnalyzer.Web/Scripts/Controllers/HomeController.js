@@ -101,6 +101,11 @@ app.controller('analysisCtrl', ['$scope', '$http',
 
                 $scope.boardState = newBoardState;
                 update();
+
+                gameState.server.getLastMove()
+                    .then(function(result) {
+                        console.log(result);
+                    });
             };
 
             function getCurrentPosition () {
@@ -110,27 +115,47 @@ app.controller('analysisCtrl', ['$scope', '$http',
                     });
             };
 
-            $scope.submitMove = function () {
-                gameState.server.move($scope.move).then(function (result) {
-                    updateBoard(result);
-                }).then(function () {
-                    gameState.server.getComputerMove()
-                        .then(function (result) {
-                            updateBoard(result);
-                        }).then(function() {
-                            $scope.eval = "--";
-                            $scope.$apply();
+            $scope.moveList = [];
 
-                            gameState.server.getEval()
-                                .then(function (result) {
-                                    $scope.eval = result;
-                                    $scope.$apply();
-                                });
-                        });
+            $scope.errorStyle = {};
+
+            $scope.submitMove = function () {
+                $scope.moveList.push($scope.move);
+
+                gameState.server.move($scope.move).then(function (result) {
+                    if (result == "") {
+                        console.log("invalid move: " + $scope.move);
+                        $scope.errorStyle = { 'background-color': 'lightpink' };
+                    } else {
+                        $scope.errorStyle = {};
+
+                        gameState.server.getComputerMove()
+                            .then(function (result) {
+                                updateBoard(result);
+                            }).then(function () {
+                                $scope.eval = "--";
+                                $scope.$apply();
+
+                                gameState.server.getEval()
+                                    .then(function (result) {
+                                        $scope.eval = result;
+                                        $scope.$apply();
+                                    });
+                            }).then(function() {
+                                gameState.server.getLastMove()
+                                    .then(function(result) {
+                                        $scope.moveList.push(result);
+                                        $scope.$apply();
+                                    });
+                            });
+
+                        updateBoard(result);
+                    }
                 });
             }
 
-            $scope.restart = function() {
+            $scope.restart = function () {
+                $scope.moveList = [];
                 gameState.server.reset()
                     .then(function () {
                         getCurrentPosition();
@@ -185,5 +210,7 @@ app.controller('analysisCtrl', ['$scope', '$http',
                     default:
                 }
             }
+
+            $scope.$apply();
         };
     }]);

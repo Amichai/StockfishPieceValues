@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using ChessKit.ChessLogic;
 using ChessKit.ChessLogic.Algorithms;
@@ -53,20 +54,33 @@ namespace Microsoft.AspNet.SignalR.StockTicker
 
             var m2 = position.ValidateLegal(m);
 
+            allMoves.Add(move);
+
             position = m2.ToPosition();
 
             return position.PrintFen();
+        }
+
+        private List<string> allMoves = new List<string>();
+
+        public string GetLastMove()
+        {
+            return allMoves.Last();
         }
 
         public string Move(string move)
         {
             try
             {
-                position = position.MakeMove(move);
+                var legalMove = position.ParseMoveFromSan(move);
+
+                allMoves.Add(move);
+
+                position = legalMove.ToPosition();
             }
             catch (NullReferenceException)
             {
-                Debug.Print($"Error making move: {move}");
+                return "";
             }
 
             return position.PrintFen();
