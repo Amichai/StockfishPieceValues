@@ -69,14 +69,100 @@ app.controller('analysisCtrl', ['$scope', '$http',
             // Start the connection
             $.connection.hub.start()
                 .then(function () {
-                    return ticker.server.getMarketState();
+                    return "";
                 })
                 .done(function (state) {
 
                 });
 
+
+            function updateBoard(result) {
+                var newBoardState = [];
+                for (var i = 0; i < result.length; i++) {
+                    var val = result[i];
+
+                    if (val === '/') {
+                        continue;
+                    }
+
+                    if (val == ' ') {
+                        break;
+                    }
+
+                    if (!isNaN(parseInt(val))) {
+                        for (var j = 0; j < parseInt(val); j++) {
+                            newBoardState.push(0);
+                        }
+
+                        continue;
+                    }
+
+                    switch (val) {
+                        case "r":
+                            newBoardState.push(-4);
+                            break;
+                        case "R":
+                            newBoardState.push(4);
+                            break;
+
+                        case "n":
+                            newBoardState.push(-2);
+                            break;
+                        case "N":
+                            newBoardState.push(2);
+                            break;
+
+                        case "b":
+                            newBoardState.push(-3);
+                            break;
+                        case "B":
+                            newBoardState.push(3);
+                            break;
+
+                        case "q":
+                            newBoardState.push(-5);
+                            break;
+                        case "Q":
+                            newBoardState.push(5);
+                            break;
+
+                        case "k":
+                            newBoardState.push(-6);
+                            break;
+                        case "K":
+                            newBoardState.push(6);
+                            break;
+
+                        case "p":
+                            newBoardState.push(-1);
+                            break;
+                        case "P":
+                            newBoardState.push(1);
+                            break;
+                        default:
+                    }
+                }
+
+                $scope.boardState = newBoardState;
+                update();
+            };
+
             $scope.submitMove = function () {
-                ticker.server.submit($scope.move);
+                ticker.server.move($scope.move).then(function (result) {
+                    updateBoard(result);
+                }).then(function () {
+                    ticker.server.getComputerMove()
+                        .then(function (result) {
+                            updateBoard(result);
+                        });
+                });
+            }
+
+            $scope.restart = function() {
+                ticker.server.reset()
+                    .then(function () {
+                        init3();
+                    });
             }
         });
 
@@ -106,6 +192,21 @@ app.controller('analysisCtrl', ['$scope', '$http',
 
                 var colorPrefix = v < 0 ? 'black' : 'white';
                 var target = $('.X' + x + 'Y' + y);
+
+                target.removeClass(function (index, classNames) {
+                    var current_classes = classNames.split(" "), // change the list into an array
+                    classes_to_remove = []; // array of classes which are to be removed
+
+                    $.each(current_classes, function (index, class_name) {
+                        // if the classname begins with bg add it to the classes_to_remove array
+                        if (class_name.includes("white") || class_name.includes("black")) {
+                            classes_to_remove.push(class_name);
+                        }
+                    });
+                    // turn the array back into a string
+                    return classes_to_remove.join(" ");
+                });
+
                 switch (Math.abs(v)) {
                     case 1:
                         target.addClass(colorPrefix + '-pawn');
@@ -125,11 +226,8 @@ app.controller('analysisCtrl', ['$scope', '$http',
                     case 6:
                         target.addClass(colorPrefix + '-king');
                         break;
-
-                default:
+                    default:
                 }
             }
         };
-
-
     }]);

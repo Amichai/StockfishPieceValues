@@ -21,24 +21,9 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             _gameState = gameState;
         }
 
-        public IEnumerable<Stock> GetAllStocks()
+        public string Move(string move)
         {
-            return _gameState.GetAllStocks();
-        }
-
-        public string GetMarketState()
-        {
-            return _gameState.MarketState.ToString();
-        }
-
-        public void OpenMarket()
-        {
-            _gameState.OpenMarket();
-        }
-
-        public void CloseMarket()
-        {
-            _gameState.CloseMarket();
+            return _gameState.Move(move);
         }
 
         public void Reset()
@@ -46,9 +31,11 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             _gameState.Reset();
         }
 
-        public void Submit(string move)
+        public string GetComputerMove()
         {
-            
+            var move = _gameState.GetComputerMove();
+
+            return _gameState.MakeComputerMove(move);
         }
     }
 }

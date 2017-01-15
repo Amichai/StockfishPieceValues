@@ -267,7 +267,6 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="SignalR\Startup.cs" />
-    <Compile Include="SignalR\Stock.cs" />
     <Compile Include="SignalR\GameState.cs" />
     <Compile Include="SignalR\GameStateHub.cs" />
     <Compile Include="Startup.cs" />
@@ -1135,6 +1134,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChessKit.ChessLogic\ChessKit.ChessLogic.csproj">
+      <Project>{7E7C0436-3E23-48F5-991B-5E3433A26E78}</Project>
+      <Name>ChessKit.ChessLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameAnalyzer.Lib\GameAnalyzer.Lib.csproj">
       <Project>{1cee6728-6e3c-48d1-ace3-3869e585eeb9}</Project>
       <Name>GameAnalyzer.Lib</Name>

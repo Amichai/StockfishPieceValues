@@ -2,6 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using ChessKit.ChessLogic;
+using ChessKit.ChessLogic.Algorithms;
+using GameAnalyzer.Lib;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Microsoft.AspNet.SignalR.StockTicker
@@ -12,25 +15,19 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         private readonly static Lazy<GameState> _instance = new Lazy<GameState>(
             () => new GameState(GlobalHost.ConnectionManager.GetHubContext<GameStateHub>().Clients));
 
-        private readonly object _marketStateLock = new object();
-        private readonly object _updateStockPricesLock = new object();
+        private const string START_POSITION = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-        private readonly ConcurrentDictionary<string, Stock> _stocks = new ConcurrentDictionary<string, Stock>();
+        private Position position;
 
-        // Stock can go up or down by a percentage of this factor on each change
-        private readonly double _rangePercent = 0.002;
-        
-        private readonly TimeSpan _updateInterval = TimeSpan.FromMilliseconds(250);
-        private readonly Random _updateOrNotRandom = new Random();
-
-        private Timer _timer;
-        private volatile bool _updatingStockPrices;
-        private volatile MarketState _marketState;
+        private Stockfish stockfish;
 
         private GameState(IHubConnectionContext<dynamic> clients)
         {
             Clients = clients;
-            LoadDefaultStocks();
+            position = Fen.ParseFen(START_POSITION);
+
+            stockfish = new Stockfish();
+
         }
 
         public static GameState Instance
@@ -47,149 +44,41 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             set;
         }
 
-        public MarketState MarketState
+        public string MakeComputerMove(string move)
         {
-            get { return _marketState; }
-            private set { _marketState = value; }
+            move = move.Insert(2, "-");
+
+            var m = ChessKit.ChessLogic.Move.Parse(move);
+
+            var m2 = position.ValidateLegal(m);
+
+            position = m2.ToPosition();
+
+            return position.PrintFen();
         }
 
-        public IEnumerable<Stock> GetAllStocks()
+        public string Move(string move)
         {
-            return _stocks.Values;
-        }
-
-        public void OpenMarket()
-        {
-            lock (_marketStateLock)
+            try
             {
-                if (MarketState != MarketState.Open)
-                {
-                    _timer = new Timer(UpdateStockPrices, null, _updateInterval, _updateInterval);
-
-                    MarketState = MarketState.Open;
-
-                    BroadcastMarketStateChange(MarketState.Open);
-                }
+                position = position.MakeMove(move);
             }
-        }
-
-        public void CloseMarket()
-        {
-            lock (_marketStateLock)
+            catch (NullReferenceException)
             {
-                if (MarketState == MarketState.Open)
-                {
-                    if (_timer != null)
-                    {
-                        _timer.Dispose();
-                    }
-
-                    MarketState = MarketState.Closed;
-
-                    BroadcastMarketStateChange(MarketState.Closed);
-                }
             }
+
+            return position.PrintFen();
         }
 
         public void Reset()
         {
-            lock (_marketStateLock)
-            {
-                if (MarketState != MarketState.Closed)
-                {
-                    throw new InvalidOperationException("Market must be closed before it can be reset.");
-                }
-                
-                LoadDefaultStocks();
-                BroadcastMarketReset();
-            }
+            position = Fen.ParseFen(START_POSITION);
         }
 
-        private void LoadDefaultStocks()
+        public string GetComputerMove()
         {
-            _stocks.Clear();
-
-            var stocks = new List<Stock>
-            {
-                new Stock { Symbol = "MSFT", Price = 41.68m },
-                new Stock { Symbol = "AAPL", Price = 92.08m },
-                new Stock { Symbol = "GOOG", Price = 543.01m }
-            };
-
-            stocks.ForEach(stock => _stocks.TryAdd(stock.Symbol, stock));
-        }
-
-        private void UpdateStockPrices(object state)
-        {
-            // This function must be re-entrant as it's running as a timer interval handler
-            lock (_updateStockPricesLock)
-            {
-                if (!_updatingStockPrices)
-                {
-                    _updatingStockPrices = true;
-
-                    foreach (var stock in _stocks.Values)
-                    {
-                        if (TryUpdateStockPrice(stock))
-                        {
-                            BroadcastStockPrice(stock);
-                        }
-                    }
-
-                    _updatingStockPrices = false;
-                }
-            }
-        }
-
-        private bool TryUpdateStockPrice(Stock stock)
-        {
-            // Randomly choose whether to udpate this stock or not
-            var r = _updateOrNotRandom.NextDouble();
-            if (r > 0.1)
-            {
-                return false;
-            }
-
-            // Update the stock price by a random factor of the range percent
-            var random = new Random((int)Math.Floor(stock.Price));
-            var percentChange = random.NextDouble() * _rangePercent;
-            var pos = random.NextDouble() > 0.51;
-            var change = Math.Round(stock.Price * (decimal)percentChange, 2);
-            change = pos ? change : -change;
-
-            stock.Price += change;
-            return true;
-        }
-
-        private void BroadcastMarketStateChange(MarketState marketState)
-        {
-            switch (marketState)
-            {
-                case MarketState.Open:
-                    Clients.All.marketOpened();
-                    break;
-                case MarketState.Closed:
-                    Clients.All.marketClosed();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void BroadcastMarketReset()
-        {
-            Clients.All.marketReset();
-        }
-
-        private void BroadcastStockPrice(Stock stock)
-        {
-            Clients.All.updateStockPrice(stock);
+            return stockfish.GetBestMove(position);
         }
     }
 
-    public enum MarketState
-    {
-        Closed,
-        Open
-    }
 }
