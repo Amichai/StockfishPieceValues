@@ -13,7 +13,6 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         public GameStateHub() :
             this(GameState.Instance)
         {
-
         }
 
         public GameStateHub(GameState gameState)
@@ -36,6 +35,16 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             var move = _gameState.GetComputerMove();
 
             return _gameState.MakeComputerMove(move);
+        }
+
+        public string GetPosition()
+        {
+            return _gameState.GetPosition();
+        }
+
+        public string GetEval()
+        {
+            return _gameState.GetEval();
         }
     }
 }

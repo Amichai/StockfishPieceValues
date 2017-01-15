@@ -24,57 +24,13 @@ app.controller('analysisCtrl', ['$scope', '$http',
         }
 
         angular.element(document).ready(function () {
-            init3();
-
-            var ticker = $.connection.gameState; // the generated client-side hub proxy
-
-            // Add client-side hub methods that the server will call
-            $.extend(ticker.client, {
-                updateStockPrice: function (stock) {
-                    var displayStock = formatStock(stock),
-                        $row = $(rowTemplate.supplant(displayStock)),
-                        $li = $(liTemplate.supplant(displayStock)),
-                        bg = stock.LastChange < 0
-                                ? '255,148,148' // red
-                                : '154,240,117'; // green
-
-                    $stockTableBody.find('tr[data-symbol=' + stock.Symbol + ']')
-                        .replaceWith($row);
-                    $stockTickerUl.find('li[data-symbol=' + stock.Symbol + ']')
-                        .replaceWith($li);
-
-                    $row.flash(bg, 1000);
-                    $li.flash(bg, 1000);
-                },
-
-                marketOpened: function () {
-                    $("#open").prop("disabled", true);
-                    $("#close").prop("disabled", false);
-                    $("#reset").prop("disabled", true);
-                    scrollTicker();
-                },
-
-                marketClosed: function () {
-                    $("#open").prop("disabled", false);
-                    $("#close").prop("disabled", true);
-                    $("#reset").prop("disabled", false);
-                    stopTicker();
-                },
-
-                marketReset: function () {
-                    return init();
-                }
-            });
+            var gameState = $.connection.gameState; // the generated client-side hub proxy
 
             // Start the connection
             $.connection.hub.start()
                 .then(function () {
-                    return "";
-                })
-                .done(function (state) {
-
+                    getCurrentPosition();
                 });
-
 
             function updateBoard(result) {
                 var newBoardState = [];
@@ -147,40 +103,40 @@ app.controller('analysisCtrl', ['$scope', '$http',
                 update();
             };
 
+            function getCurrentPosition () {
+                gameState.server.getPosition()
+                    .then(function(result) {
+                        updateBoard(result);
+                    });
+            };
+
             $scope.submitMove = function () {
-                ticker.server.move($scope.move).then(function (result) {
+                gameState.server.move($scope.move).then(function (result) {
                     updateBoard(result);
                 }).then(function () {
-                    ticker.server.getComputerMove()
+                    gameState.server.getComputerMove()
                         .then(function (result) {
                             updateBoard(result);
+                        }).then(function() {
+                            $scope.eval = "--";
+                            $scope.$apply();
+
+                            gameState.server.getEval()
+                                .then(function (result) {
+                                    $scope.eval = result;
+                                    $scope.$apply();
+                                });
                         });
                 });
             }
 
             $scope.restart = function() {
-                ticker.server.reset()
+                gameState.server.reset()
                     .then(function () {
-                        init3();
+                        getCurrentPosition();
                     });
             }
         });
-
-        var init3 = function() {
-            $scope.boardState = [
-                -4, -2, -3, -5, -6, -3, -2, -4,
-                -1, -1, -1, -1, -1, -1, -1, -1,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                4, 2, 3, 5, 6, 3, 2, 4
-            ];
-
-            update();
-        };
-
 
         // at the bottom of your controller
         var update = function () {

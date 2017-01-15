@@ -5,22 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using ChessKit.ChessLogic;
 using ChessKit.ChessLogic.Algorithms;
 using ChessKit.ChessLogic.Primitives;
-using RunProcess;
+using ProcessHost = RunProcess.ProcessHost;
 
 namespace GameAnalyzer.Lib
 {
     public sealed class Stockfish
     {
-        private const string STOCKFISH_PATH = @"C:\Users\Amichai\Documents\Projects\GameAnalyzer\stockfish\stockfish-6-64.exe";
-
         private readonly ProcessHost process;
 
         public Stockfish()
         {
-            process = new ProcessHost(STOCKFISH_PATH, null);
+            process = new ProcessHost(HostingEnvironment.MapPath("~/App_Data/stockfish-6-64.exe"), null);
             process.Start();
             process.StdIn.WriteLine(Encoding.ASCII, "uci");
             string output = process.StdOut.ReadAllText(Encoding.ASCII);

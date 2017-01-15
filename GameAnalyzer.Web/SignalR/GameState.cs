@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using ChessKit.ChessLogic;
 using ChessKit.ChessLogic.Algorithms;
@@ -65,6 +66,7 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             }
             catch (NullReferenceException)
             {
+                Debug.Print($"Error making move: {move}");
             }
 
             return position.PrintFen();
@@ -78,6 +80,24 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         public string GetComputerMove()
         {
             return stockfish.GetBestMove(position);
+        }
+
+        public string GetPosition()
+        {
+            return position.PrintFen();
+        }
+
+        public string GetEval()
+        {
+            int mate;
+            var val = stockfish.AnalyzePosition(position, out mate);
+
+            if (mate != -1)
+            {
+                return "#" + mate;
+            }
+
+            return val.ToString();
         }
     }
 
