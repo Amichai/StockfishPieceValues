@@ -17,19 +17,11 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         private readonly static Lazy<GameState> _instance = new Lazy<GameState>(
             () => new GameState(GlobalHost.ConnectionManager.GetHubContext<GameStateHub>().Clients));
 
-        private const string START_POSITION = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        private Position position;
-
-        private Stockfish stockfish;
+        private ConcurrentDictionary<string, GameEngine> engines = new ConcurrentDictionary<string, GameEngine>();
 
         private GameState(IHubConnectionContext<dynamic> clients)
         {
             Clients = clients;
-            position = Fen.ParseFen(START_POSITION);
-
-            stockfish = new Stockfish();
-
         }
 
         public static GameState Instance => _instance.Value;
@@ -40,78 +32,75 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             set;
         }
 
-        public string MakeComputerMove(string move)
+        private GameEngine GetGameEngine(string connectionId)
         {
-            move = move.Insert(2, "-");
-
-            var m = ChessKit.ChessLogic.Move.Parse(move);
-
-            var m2 = position.ValidateLegal(m);
-
-            allMoves.Add(move);
-
-            position = m2.ToPosition();
-
-            return position.PrintFen();
-        }
-
-        private readonly List<string> allMoves = new List<string>();
-
-        public string GetLastMove()
-        {
-            return allMoves.Last();
-        }
-
-        public string Move(string move)
-        {
-            try
+            GameEngine engine;
+            if (!engines.TryGetValue(connectionId, out engine))
             {
-                var legalMove = position.ParseMoveFromSan(move);
-
-                allMoves.Add(move);
-
-                position = legalMove.ToPosition();
-            }
-            catch (NullReferenceException)
-            {
-                return "";
+                engine = new GameEngine();
+                if (!engines.TryAdd(connectionId, engine))
+                {
+                }
             }
 
-            return position.PrintFen();
+            return engine;
         }
 
-        public void Reset()
+        public string MakeComputerMove(string move, string connectionId)
         {
-            position = START_POSITION.ParseFen();
+            var engine = GetGameEngine(connectionId);
+
+            return engine.MakeComputerMove(move);
         }
 
-        public string GetComputerMove()
+        public string GetLastMove(string connectionId)
         {
-            return stockfish.GetBestMove(position);
+            var engine = GetGameEngine(connectionId);
+
+            return engine.GetLastMove();
         }
 
-        public string GetPosition()
+        public string Move(string move, string connectionId)
         {
-            return position.PrintFen();
+            var engine = GetGameEngine(connectionId);
+
+            return engine.Move(move);
         }
 
-        public string GetEval()
+        public void Reset(string connectionId)
         {
-            int mate;
-            var val = stockfish.AnalyzePosition(position, out mate);
+            var engine = GetGameEngine(connectionId);
 
-            if (mate != -1)
-            {
-                return "#" + mate;
-            }
+            engine.Reset();
+        }
 
-            return val.ToString();
+        public string GetComputerMove(string connectionId)
+        {
+            var engine = GetGameEngine(connectionId);
+
+            return engine.GetComputerMove();
+        }
+
+        public string GetPosition(string connectionId)
+        {
+            var engine = GetGameEngine(connectionId);
+
+            return engine.GetPosition();
+        }
+
+        public string GetEval(string connectionId)
+        {
+            var engine = GetGameEngine(connectionId);
+
+            return engine.GetEval();
         }
 
 
-        public List<double> GetPieceEvals()
+        public List<double> GetPieceEvals(string connectionId)
         {
-            return stockfish.DeterminePieceValues(position);
+            var engine = GetGameEngine(connectionId);
+
+            return engine.GetPieceEvals();
         }
     }
 }

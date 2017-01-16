@@ -21,41 +21,41 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             _gameState = gameState;
         }
 
-        public string Move(string move)
+        public string Move(string move, string connectionId)
         {
-            return _gameState.Move(move);
+            return _gameState.Move(move, connectionId);
         }
 
-        public void Reset()
+        public void Reset(string connectionId)
         {
-            _gameState.Reset();
+            _gameState.Reset(connectionId);
         }
 
-        public string GetComputerMove()
+        public string GetComputerMove(string connectionId)
         {
-            var move = _gameState.GetComputerMove();
+            var move = _gameState.GetComputerMove(connectionId);
 
-            return _gameState.MakeComputerMove(move);
+            return _gameState.MakeComputerMove(move, connectionId);
         }
 
-        public string GetPosition()
+        public string GetPosition(string connectionId)
         {
-            return _gameState.GetPosition();
+            return _gameState.GetPosition(connectionId);
         }
 
-        public string GetEval()
+        public string GetEval(string connectionId)
         {
-            return _gameState.GetEval();
+            return _gameState.GetEval(connectionId);
         }
 
-        public string GetLastMove()
+        public string GetLastMove(string connectionId)
         {
-            return _gameState.GetLastMove();
+            return _gameState.GetLastMove(connectionId);
         }
 
-        public List<double> GetPieceEvals()
+        public List<double> GetPieceEvals(string connectionId)
         {
-            return _gameState.GetPieceEvals();
+            return _gameState.GetPieceEvals(connectionId);
         }
     }
 }
