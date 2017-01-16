@@ -52,5 +52,10 @@ namespace Microsoft.AspNet.SignalR.StockTicker
         {
             return _gameState.GetLastMove();
         }
+
+        public List<double> GetPieceEvals()
+        {
+            return _gameState.GetPieceEvals();
+        }
     }
 }

@@ -2,18 +2,19 @@
 
 <div ng-app="chessApp">
     <div ng-controller="analysisCtrl">
-
+        <br />
         <div class="row">
-            <div>{{eval}}</div>
+            <div>Eval: <b>{{eval}}</b></div>
         </div>
-
 
         <div class="row">
             <div id="mainBoard" class="col-md-5">
                 <div ng-repeat="x in [0,1,2,3,4,5,6,7]">
                     <span ng-repeat="y in [0,1,2,3,4,5,6,7]">
                         <span ng-class="getClass(x, y)" class="cell X{{x}}Y{{y}}"
-                              ng-style="{'transform': getTransform(x, y)}">|{{x}},{{y}}|</span>
+                              ng-style="{'transform': getTransform(x, y)}">
+                            <span ng-show="getPieceEval(x, y) != 0">{{getPieceEval(x, y)}}</span>
+                        </span>
                     </span>
                 </div>
             </div>
@@ -31,9 +32,6 @@
         <button type="button" class="btn btn-default" ng-click="submitMove()">Submit</button>
 
         <br/>
-        <br/>
-        <br/>
-
         <br/>
 
         <button type="button" class="btn btn-default" ng-click="restart()">Restart</button>

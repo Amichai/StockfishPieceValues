@@ -98,5 +98,105 @@ namespace GameAnalyzer.Lib
 
             return eval * (positionState.Core.Turn == Color.White ? 1 : -1);
         }
+
+        private IEnumerable<string> GetAdjustedFENs(string fen)
+        {
+            var c = ' ';
+
+            for (var i = 0; i < fen.Length; i++)
+            {
+                var a = fen[i];
+
+                if (a == '/' || char.IsDigit(a) || a == 'k' || a == 'K')
+                {
+                    continue;
+                }
+
+                if (a == ' ')
+                {
+                    yield break;
+                }
+
+                var b = fen[i + 1];
+
+                if (i > 0)
+                {
+                    c = fen[i - 1];
+                }
+
+                if (char.IsDigit(b) && char.IsDigit(c))
+                {
+                    var s = int.Parse(b.ToString()) + int.Parse(c.ToString()) + 1;
+                    yield return fen.Substring(0, i - 1) + s + fen.Substring(i + 2);
+                }
+                else if (char.IsDigit(b))
+                {
+                    var s = int.Parse(b.ToString()) + 1;
+                    yield return fen.Substring(0, i) + s + fen.Substring(i + 2);
+                }
+                else if (char.IsDigit(c))
+                {
+                    var s = int.Parse(c.ToString()) + 1;
+                    yield return fen.Substring(0, i - 1) + s + fen.Substring(i + 1);
+                }
+                else
+                {
+                    yield return fen.Substring(0, i) + "1" + fen.Substring(i + 1);
+                }
+            }
+        }
+
+        public List<double> DeterminePieceValues(Position position)
+        {
+            int mate;
+            var initialEval = AnalyzePosition(position, out mate);
+
+            if (mate != -1)
+            {
+                return new List<double>();
+            }
+
+            var toReturn = Enumerable.Range(0, 64).Select(i => 0d).ToList();
+
+            var originalCells = position.Core.GetCopyOfCells();
+
+            //"rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1"
+            var fen = Fen.PrintFen(position);
+
+            foreach (var adjustedFeN in GetAdjustedFENs(fen))
+            {
+                Debug.Print(adjustedFeN);
+
+                var adjustedPosition = Fen.ParseFen(adjustedFeN);
+
+                var eval = AnalyzePosition(adjustedPosition, out mate);
+
+                var newCells = adjustedPosition.Core.GetCopyOfCells();
+
+                var pieceVal = mate == -1 ? eval - initialEval : -1;
+
+                for (var i = 0; i < 128; i++)
+                {
+                    if (originalCells[i] != newCells[i])
+                    {
+                        Debug.Print(i.ToString());
+
+                        var a = i / 16;
+                        var b = i % 16;
+                        var c = a*8 + b;
+                        Debug.Print($"{a}, {b}, {c}");
+
+                        toReturn[c] = Math.Round(Math.Abs(pieceVal), 2);
+
+                        break;
+                    }
+                }
+
+                Debug.Print($"Eval diff: {pieceVal}");
+
+            }
+
+            return toReturn;
+        }
     }
 }

@@ -32,13 +32,7 @@ namespace Microsoft.AspNet.SignalR.StockTicker
 
         }
 
-        public static GameState Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        public static GameState Instance => _instance.Value;
 
         private IHubConnectionContext<dynamic> Clients
         {
@@ -61,7 +55,7 @@ namespace Microsoft.AspNet.SignalR.StockTicker
             return position.PrintFen();
         }
 
-        private List<string> allMoves = new List<string>();
+        private readonly List<string> allMoves = new List<string>();
 
         public string GetLastMove()
         {
@@ -88,7 +82,7 @@ namespace Microsoft.AspNet.SignalR.StockTicker
 
         public void Reset()
         {
-            position = Fen.ParseFen(START_POSITION);
+            position = START_POSITION.ParseFen();
         }
 
         public string GetComputerMove()
@@ -113,6 +107,11 @@ namespace Microsoft.AspNet.SignalR.StockTicker
 
             return val.ToString();
         }
-    }
 
+
+        public List<double> GetPieceEvals()
+        {
+            return stockfish.DeterminePieceValues(position);
+        }
+    }
 }
